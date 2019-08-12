@@ -1,0 +1,34 @@
+const showdown = require('showdown')
+const converter = new showdown.Converter()
+converter.setFlavor('github')
+const fs = require('fs')
+const path = require('path')
+const rm = require('rimraf')
+
+const mdFolder = 'markdown' // md目录
+const htmlFolder = 'html' // html目录
+
+rm.sync(path.resolve(htmlFolder)) // 删除html文件夹
+if (!fs.existsSync(htmlFolder)) {
+  fs.mkdirSync(htmlFolder) // 新建html文件夹
+}
+fs.readdir(path.resolve(mdFolder), (err, files) => { // 读取md文件夹文件列表
+  if (err) throw err
+  let sum = 0
+  const total = files.length
+  files.forEach(file => {
+    sum++
+    const fileName = file.match(/(.*)\.[^.]+$/)[1]
+    fs.readFile(path.resolve(`${mdFolder}/${file}`), 'utf8', (err, data) => {
+      if (err) {
+        console.error(err)
+        return
+      }
+      const htmlContent = converter.makeHtml(data)
+      fs.writeFile(path.resolve(`${htmlFolder}/${fileName}.html`), htmlContent, 'utf8', (err) => {
+        if (err) throw err;
+        console.log(`${file} => ${fileName}.html 成功, 当前转换进度 ${sum} / ${total}`)
+      })
+    })
+  })
+})
