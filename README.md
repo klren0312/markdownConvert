@@ -5,6 +5,12 @@
  - Convert markdown to PDF
  - Convert markdown to HTML
 
+## dependenies
+
+ - `markdown-pdf` convert markdown to pdf
+ - `rimraf` like linux `rm -rf`
+ - `showdown` convert markdown to html
+
 ## Install dependencies
 ```bash
 npm install # or yarn

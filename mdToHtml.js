@@ -14,18 +14,18 @@ if (!fs.existsSync(htmlFolder)) {
 }
 fs.readdir(path.resolve(mdFolder), (err, files) => { // 读取md文件夹文件列表
   if (err) throw err
-  let sum = 0
-  const total = files.length
-  files.forEach(file => {
+  let sum = 0 // 用于 markdown 文件计数
+  const total = files.length // 总文件数
+  files.forEach(file => { // 遍历文件
     sum++
-    const fileName = file.match(/(.*)\.[^.]+$/)[1]
-    fs.readFile(path.resolve(`${mdFolder}/${file}`), 'utf8', (err, data) => {
+    const fileName = file.match(/(.*)\.[^.]+$/)[1] // 提取文件名 test.md => test
+    fs.readFile(path.resolve(`${mdFolder}/${file}`), 'utf8', (err, data) => { // 读取文件
       if (err) {
         console.error(err)
         return
       }
-      const htmlContent = converter.makeHtml(data)
-      fs.writeFile(path.resolve(`${htmlFolder}/${fileName}.html`), htmlContent, 'utf8', (err) => {
+      const htmlContent = converter.makeHtml(data) // md 转成 html
+      fs.writeFile(path.resolve(`${htmlFolder}/${fileName}.html`), htmlContent, 'utf8', (err) => { // 写入到html文件
         if (err) throw err;
         console.log(`${file} => ${fileName}.html 成功, 当前转换进度 ${sum} / ${total}`)
       })
