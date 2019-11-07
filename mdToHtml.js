@@ -8,6 +8,8 @@ const rm = require('rimraf')
 const mdFolder = 'markdown' // md目录
 const htmlFolder = 'html' // html目录
 
+const css = fs.readFileSync(path.resolve('css.txt'), 'utf8') // 获取css文本
+
 rm.sync(path.resolve(htmlFolder)) // 删除html文件夹
 if (!fs.existsSync(htmlFolder)) {
   fs.mkdirSync(htmlFolder) // 新建html文件夹
@@ -24,7 +26,7 @@ fs.readdir(path.resolve(mdFolder), (err, files) => { // 读取md文件夹文件�
         console.error(err)
         return
       }
-      const htmlContent = converter.makeHtml(data) // md 转成 html
+      const htmlContent = converter.makeHtml(css + data) // md 转成 html
       fs.writeFile(path.resolve(`${htmlFolder}/${fileName}.html`), htmlContent, 'utf8', (err) => { // 写入到html文件
         if (err) throw err;
         console.log(`${file} => ${fileName}.html 成功, 当前转换进度 ${sum} / ${total}`)
